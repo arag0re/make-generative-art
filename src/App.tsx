@@ -10,37 +10,6 @@ import "./App.css";
 import Navigation from "./components/Navbar";
 import { getAlgorithmValue } from "./components/AlgorithmKeys";
 
-function generateHTML(algorithm: string) {
-  let randomSeed = Math.floor(Math.random() * 10000000000000);
-  let randomSeedString = ethers.utils.hexlify(randomSeed);
-
-  let hash = ethers.utils.keccak256(randomSeedString);
-  let hashes = ethers.utils.keccak256(randomSeedString);
-
-  let rawHTML = `<!DOCTYPE html>
-<html lang="en">
-	<head>
-	<meta charset="UTF-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>Document</title>
-	<script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
-	</head>
-
-	<body></body>
-	<script>
-		let tokenData = {
-			hash: "${hash}",
-			hashes: ["${hashes}"],
-		};
-	</script>
-	<script src="algorithms/${algorithm}"></script>
-</html>
-	`;
-
-  return rawHTML;
-}
-
 const ButtonDiv = styled.div`
   margin-top: 30px;
   text-align: center;
@@ -56,18 +25,35 @@ const Description = styled.p`
   margin-top: 20px;
 `;
 
+function generateRandom() {
+  let randomSeed = Math.floor(Math.random() * 10000000000000);
+  let randomSeedString = ethers.utils.hexlify(randomSeed);
+  return ethers.utils.keccak256(randomSeedString);
+}
+
 function App() {
   const [loaded, setLoaded] = React.useState(0);
+
+  let initSeed = generateRandom();
+  const [seed, setSeed] = React.useState(initSeed);
 
   let initAlgorithm = getAlgorithmValue("Chromie Squiggle");
   const [algorithm, setAlgorithm] = React.useState(initAlgorithm);
 
-  let initImageHTML = generateHTML(algorithm);
+  let initImageHTML = generateHTML(algorithm, seed);
   const [imageHTML, setImageHTML] = React.useState(initImageHTML);
 
   function handleSetAlgorithm(algorithm: string) {
+    let newRNG = generateRandom();
+    setSeed(newRNG);
     setAlgorithm(getAlgorithmValue(algorithm));
-    setImageHTML(generateHTML(getAlgorithmValue(algorithm)));
+    setImageHTML(generateHTML(getAlgorithmValue(algorithm), newRNG));
+  }
+
+  function handleGenerate() {
+    let newRNG = generateRandom();
+    setSeed(newRNG);
+    setImageHTML(generateHTML(algorithm, newRNG));
   }
 
   function getWindowDimensions() {
@@ -76,6 +62,33 @@ function App() {
       width,
       height,
     };
+  }
+
+  console.log(seed);
+
+  function generateHTML(algorithm: string, seed: string) {
+    let rawHTML = `<!DOCTYPE html>
+  <html lang="en">
+	  <head>
+	  <meta charset="UTF-8" />
+	  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	  <title>Document</title>
+	  <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+	  </head>
+  
+	  <body></body>
+	  <script>
+		  let tokenData = {
+			  hash: "${seed}",
+			  hashes: ["${seed}"],
+		  };
+	  </script>
+	  <script src="algorithms/${algorithm}"></script>
+  </html>
+	  `;
+
+    return rawHTML;
   }
 
   function renderIFrame() {
@@ -119,15 +132,18 @@ function App() {
         <Row>{renderIFrame()}</Row>
 
         <ButtonDiv>
-          <StyledButton
-            variant="dark"
-            onClick={() => setImageHTML(generateHTML(algorithm))}
-          >
+          <StyledButton variant="dark" onClick={() => handleGenerate()}>
             Generate
           </StyledButton>
           <Description>
-            If the image is not showing up, please wait a few seconds. <br /> It
-            takes time to render the art from the algorithm in your browser.
+            This was generated using the seed
+            <br />
+            <i>{seed}</i>
+          </Description>
+
+          <Description>
+            Save this string if you like the art. <br />
+            It is the only way to re-generate the same piece.
           </Description>
         </ButtonDiv>
       </Container>
