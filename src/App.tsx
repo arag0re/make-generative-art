@@ -25,6 +25,21 @@ const Description = styled.p`
   margin-top: 20px;
 `;
 
+const DescriptionCopy = styled.p`
+  margin-top: 20px;
+  font-weight: bold;
+`;
+
+const ButtonText = styled.button`
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  outline: inherit;
+`;
+
 function generateRandom() {
   let randomSeed = Math.floor(Math.random() * 10000000000000);
   let randomSeedString = ethers.utils.hexlify(randomSeed);
@@ -98,7 +113,7 @@ function App() {
       return (
         <iframe
           title="ArtBlocks"
-          height="400"
+          height="350"
           srcDoc={imageHTML}
           scrolling="no"
           frameBorder={0}
@@ -125,6 +140,12 @@ function App() {
     }
   }
 
+  function handleCopyText() {
+    const cb = navigator.clipboard;
+    let msg = "You copied the seed " + seed;
+    cb.writeText(seed).then(() => alert(msg));
+  }
+
   return (
     <>
       <Navigation handleSetAlgorithm={handleSetAlgorithm} />
@@ -135,15 +156,18 @@ function App() {
           <StyledButton variant="dark" onClick={() => handleGenerate()}>
             Generate
           </StyledButton>
-          <Description>
-            This was generated using the seed
-            <br />
-            <i>{seed}</i>
-          </Description>
+
+          <br />
+          <ButtonText onClick={() => handleCopyText()}>
+            <DescriptionCopy>
+              Click this to copy the random seed used
+            </DescriptionCopy>
+          </ButtonText>
 
           <Description>
-            Save this string if you like the art. <br />
-            It is the only way to re-generate the same piece.
+            The seed is how the art piece gets generated. <br />
+            Keep it close, or you will never be able to regenerate this exact
+            piece ever again.
           </Description>
         </ButtonDiv>
       </Container>
