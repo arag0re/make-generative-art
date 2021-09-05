@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/make-generative-art/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/make-generative-art/static/js/main.770984d7.chunk.js",
-    "main.js.map": "/make-generative-art/static/js/main.770984d7.chunk.js.map",
+    "main.js": "/make-generative-art/static/js/main.47040297.chunk.js",
+    "main.js.map": "/make-generative-art/static/js/main.47040297.chunk.js.map",
     "runtime-main.js": "/make-generative-art/static/js/runtime-main.ff07d906.js",
     "runtime-main.js.map": "/make-generative-art/static/js/runtime-main.ff07d906.js.map",
     "static/css/2.c490997a.chunk.css": "/make-generative-art/static/css/2.c490997a.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.c490997a.chunk.css",
     "static/js/2.211d4d98.chunk.js",
     "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.770984d7.chunk.js"
+    "static/js/main.47040297.chunk.js"
   ]
 }
