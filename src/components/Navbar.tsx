@@ -18,9 +18,7 @@ const Navigation = (props: NavInterface) => {
     <>
       <Navbar bg="dark" variant="dark">
         <Container>
-          <Navbar.Brand href="/make-generative-art/">
-            Make Generative Art
-          </Navbar.Brand>
+          <Navbar.Brand href="/make-generative-art/">🤖 + 🎨</Navbar.Brand>
 
           <NavDropdown
             title={<NavDropdownTitle>Choose Algorithm</NavDropdownTitle>}
