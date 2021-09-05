@@ -70,26 +70,57 @@ function App() {
     setImageHTML(generateHTML(getAlgorithmValue(algorithm)));
   }
 
+  function getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+      width,
+      height,
+    };
+  }
+
+  function renderIFrame() {
+    let dims = getWindowDimensions();
+    let width = dims["width"];
+    if (width < 600) {
+      return (
+        <iframe
+          title="ArtBlocks"
+          height="400"
+          srcDoc={imageHTML}
+          scrolling="no"
+          frameBorder={0}
+          allowFullScreen
+          sandbox="allow-scripts"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          onLoad={() => setLoaded(1)}
+        ></iframe>
+      );
+    } else {
+      return (
+        <iframe
+          title="ArtBlocks"
+          height="700"
+          srcDoc={imageHTML}
+          scrolling="no"
+          frameBorder={0}
+          allowFullScreen
+          sandbox="allow-scripts"
+          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+          onLoad={() => setLoaded(1)}
+        ></iframe>
+      );
+    }
+  }
+
+  const [windowDimensions, setWindowDimensions] = React.useState(
+    getWindowDimensions()
+  );
+
   return (
     <>
       <Navigation handleSetAlgorithm={handleSetAlgorithm} />
       <Container fluid>
-        <Row>
-          {!loaded ? (
-            <Spinner animation="border" role="status"></Spinner>
-          ) : null}
-          <iframe
-            title="ArtBlocks"
-            height="700"
-            srcDoc={imageHTML}
-            scrolling="no"
-            frameBorder={0}
-            allowFullScreen
-            sandbox="allow-scripts"
-            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-            onLoad={() => setLoaded(1)}
-          ></iframe>
-        </Row>
+        <Row>{renderIFrame()}</Row>
 
         <ButtonDiv>
           <StyledButton
