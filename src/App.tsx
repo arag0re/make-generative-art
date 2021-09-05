@@ -52,8 +52,7 @@ function App() {
   let initSeed = generateRandom();
   const [seed, setSeed] = React.useState(initSeed);
 
-  let initAlgorithm = getAlgorithmValue("Chromie Squiggle");
-  const [algorithm, setAlgorithm] = React.useState(initAlgorithm);
+  const [algorithm, setAlgorithm] = React.useState("Chromie Squiggle");
 
   let initImageHTML = generateHTML(algorithm, seed);
   const [imageHTML, setImageHTML] = React.useState(initImageHTML);
@@ -61,8 +60,8 @@ function App() {
   function handleSetAlgorithm(algorithm: string) {
     let newRNG = generateRandom();
     setSeed(newRNG);
-    setAlgorithm(getAlgorithmValue(algorithm));
-    setImageHTML(generateHTML(getAlgorithmValue(algorithm), newRNG));
+    setAlgorithm(algorithm);
+    setImageHTML(generateHTML(algorithm, newRNG));
   }
 
   function handleGenerate() {
@@ -82,6 +81,7 @@ function App() {
   console.log(seed);
 
   function generateHTML(algorithm: string, seed: string) {
+    let filename = getAlgorithmValue(algorithm);
     let rawHTML = `<!DOCTYPE html>
   <html lang="en">
 	  <head>
@@ -99,7 +99,7 @@ function App() {
 			  hashes: ["${seed}"],
 		  };
 	  </script>
-	  <script src="algorithms/${algorithm}"></script>
+	  <script src="algorithms/${filename}"></script>
   </html>
 	  `;
 
@@ -157,10 +157,13 @@ function App() {
             Generate
           </StyledButton>
 
-          <br />
+          <Description>
+            <i>Current Series: {algorithm}</i>
+          </Description>
+
           <ButtonText onClick={() => handleCopyText()}>
             <DescriptionCopy>
-              Click this to copy the random seed used
+              👉 Click this to copy the random seed used 👈
             </DescriptionCopy>
           </ButtonText>
 
