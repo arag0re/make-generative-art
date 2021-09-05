@@ -1,4 +1,3 @@
-console.log(tokenData);
 let numHashes = tokenData.hashes.length;
 let hashPairs = [];
 for (let i = 0; i < numHashes; i++) {
