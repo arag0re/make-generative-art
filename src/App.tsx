@@ -2,13 +2,9 @@ import React from "react";
 import styled from "styled-components";
 
 import * as ethers from "ethers";
-import Spinner from "react-bootstrap/Spinner";
 import Button from "react-bootstrap/Button";
-import Dropdown from "react-bootstrap/Dropdown";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import DropdownButton from "react-bootstrap/DropdownButton";
 
 import "./App.css";
 import Navigation from "./components/Navbar";
@@ -54,6 +50,10 @@ const StyledButton = styled(Button)`
   width: 250px;
   height: 50px;
   object-fit: none;
+`;
+
+const Description = styled.p`
+  margin-top: 20px;
 `;
 
 function App() {
@@ -112,10 +112,6 @@ function App() {
     }
   }
 
-  const [windowDimensions, setWindowDimensions] = React.useState(
-    getWindowDimensions()
-  );
-
   return (
     <>
       <Navigation handleSetAlgorithm={handleSetAlgorithm} />
@@ -129,6 +125,10 @@ function App() {
           >
             Generate
           </StyledButton>
+          <Description>
+            If the image is not showing up, please wait a few seconds. <br /> It
+            takes time to render the art from the algorithm in your browser.
+          </Description>
         </ButtonDiv>
       </Container>
     </>

@@ -2,10 +2,16 @@ import Container from "react-bootstrap/Container";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Navbar from "react-bootstrap/Navbar";
 import { AlgorithmKeys } from "./AlgorithmKeys";
+import styled from "styled-components";
 
 interface NavInterface {
   handleSetAlgorithm: (algorithm: string) => void;
 }
+
+const NavDropdownTitle = styled.span`
+  color: white !important;
+  font-size: 16px;
+`;
 
 const Navigation = (props: NavInterface) => {
   return (
@@ -17,9 +23,10 @@ const Navigation = (props: NavInterface) => {
           </Navbar.Brand>
 
           <NavDropdown
-            title="Change Algorithm"
+            title={<NavDropdownTitle>Choose Algorithm</NavDropdownTitle>}
             id="navbarScrollingDropdown"
             className="me-auto"
+            menuVariant="dark"
           >
             {AlgorithmKeys().map((key) => (
               <NavDropdown.Item
