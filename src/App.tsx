@@ -5,34 +5,33 @@ import "bootstrap/dist/css/bootstrap.min.css";
 
 import "./App.css";
 
-function generateHTML() {
+function generateHTML(algorithm: string) {
 	let randomSeed = Math.floor(Math.random() * 10000000000000);
 	let randomSeedString = ethers.utils.hexlify(randomSeed);
 
 	let hash = ethers.utils.keccak256(randomSeedString);
-	let hashes = [ethers.utils.keccak256(randomSeedString)];
+	let hashes = ethers.utils.keccak256(randomSeedString);
 
-	let rawHTML = `
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>Document</title>
-      <script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
-    </head>
-  
-    <body></body>
-    <script>
+	let rawHTML = `<!DOCTYPE html>
+<html lang="en">
+	<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>Document</title>
+	<script src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.js"></script>
+	</head>
+
+	<body></body>
+	<script>
 		let tokenData = {
 			hash: "${hash}",
-			hashes: "${hashes}",
+			hashes: ["${hashes}"],
 		};
-	  </script>
-    <script src="fidenza.js"></script>
-  </html>
-  `;
+	</script>
+	<script src="algorithms/${algorithm}.js"></script>
+</html>
+	`;
 
 	return rawHTML;
 }
@@ -47,7 +46,7 @@ function App() {
 				title="ArtBlocks"
 				width="100%"
 				height="600"
-				srcDoc={generateHTML()}
+				srcDoc={generateHTML("chromie_squiggle")}
 				scrolling="no"
 				frameBorder={0}
 				allowFullScreen

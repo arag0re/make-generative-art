@@ -154,3 +154,5 @@ dist
 .vscode
 
 .DS_Store
+
+build/
