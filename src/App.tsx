@@ -81,7 +81,8 @@ function App() {
   document.addEventListener("keydown", logKey);
 
   function logKey(e: any) {
-    if (e.code == "Space" || e.code == "Enter") {
+    if ((e.code == "Space" && e.target == document.body) || e.code == "Enter") {
+      e.preventDefault();
       handleGenerate();
     }
   }
