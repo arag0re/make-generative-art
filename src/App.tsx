@@ -17,7 +17,7 @@ const ButtonDiv = styled.div`
 
 const StyledButton = styled(Button)`
   width: 250px;
-  height: 50px;
+  height: 70px;
   object-fit: none;
 `;
 
@@ -78,7 +78,13 @@ function App() {
     };
   }
 
-  console.log(seed);
+  document.addEventListener("keydown", logKey);
+
+  function logKey(e: any) {
+    if (e.code == "Space" || e.code == "Enter") {
+      handleGenerate();
+    }
+  }
 
   function generateHTML(algorithm: string, seed: string) {
     let filename = getAlgorithmValue(algorithm);
@@ -154,7 +160,8 @@ function App() {
 
         <ButtonDiv>
           <StyledButton variant="dark" onClick={() => handleGenerate()}>
-            Generate
+            <b>Generate</b> <br />
+            (⎵ or Enter)
           </StyledButton>
 
           <Description>
