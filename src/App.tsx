@@ -46,6 +46,17 @@ function generateRandom() {
   return ethers.utils.keccak256(randomSeedString);
 }
 
+function setSeedWithInput() {
+  let seed = prompt("Please enter your seed here", "must be hex tho");
+  let text;
+  if (seed == null || seed == "") {
+    text = "User cancelled the prompt.";
+  } else {
+    text = seed;
+  }
+  return text
+}
+
 function App() {
   const [loaded, setLoaded] = React.useState(0);
 
@@ -64,10 +75,16 @@ function App() {
     setImageHTML(generateHTML(algorithm, newRNG));
   }
 
-  function handleGenerate() {
+  function handleGenerateWithRandomSeed() {
     let newRNG = generateRandom();
     setSeed(newRNG);
     setImageHTML(generateHTML(algorithm, newRNG));
+  }
+
+  function handleGenerateWithGivenSeed() {
+    let seed = setSeedWithInput();
+    setSeed(seed);
+    setImageHTML(generateHTML(algorithm, seed));
   }
 
   function getWindowDimensions() {
@@ -78,14 +95,14 @@ function App() {
     };
   }
 
-  document.addEventListener("keydown", logKey);
+  /*document.addEventListener("keydown", logKey);*/
 
-  function logKey(e: any) {
+ /* function logKey(e: any) {
     if ((e.code == "Space" && e.target == document.body) || e.code == "Enter") {
       e.preventDefault();
-      handleGenerate();
+      handleGenerateWithRandomSeed();
     }
-  }
+  }*/
 
   function generateHTML(algorithm: string, seed: string) {
     let filename = getAlgorithmValue(algorithm);
@@ -116,11 +133,11 @@ function App() {
   function renderIFrame() {
     let dims = getWindowDimensions();
     let width = dims["width"];
-    if (width < 600) {
+    if (width < 2000) {
       return (
         <iframe
           title="ArtBlocks"
-          height="350"
+          height="2000"
           srcDoc={imageHTML}
           scrolling="no"
           frameBorder={0}
@@ -134,7 +151,7 @@ function App() {
       return (
         <iframe
           title="ArtBlocks"
-          height="700"
+          height="2600"
           srcDoc={imageHTML}
           scrolling="no"
           frameBorder={0}
@@ -156,14 +173,18 @@ function App() {
   return (
     <>
       <Navigation handleSetAlgorithm={handleSetAlgorithm} />
-      <Container fluid>
-        <Row>{renderIFrame()}</Row>
+      <Container style={{textAlign: "center"}}fluid>
+        <Row style={{textAlign: "center"}}>{renderIFrame()}</Row>
 
         <ButtonDiv>
-          <StyledButton variant="dark" onClick={() => handleGenerate()}>
-            <b>Generate</b> <br />
+          <StyledButton variant="dark" onClick={() => handleGenerateWithRandomSeed()}>
+            <b>Generate with random Seed</b> <br />
             (⎵ or Enter)
           </StyledButton>
+          <StyledButton variant="dark" onClick={() => handleGenerateWithGivenSeed()}>
+            <b>Generate with your preferred Seed</b> <br />
+          </StyledButton>
+
 
           <Description>
             <i>Current Series: {algorithm}</i>
