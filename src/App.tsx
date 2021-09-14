@@ -1,101 +1,101 @@
-import React from "react";
-import styled from "styled-components";
+import React from 'react'
+import styled from 'styled-components'
 
-import * as ethers from "ethers";
-import Button from "react-bootstrap/Button";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
+import * as ethers from 'ethers'
+import Button from 'react-bootstrap/Button'
+import Container from 'react-bootstrap/Container'
+import Row from 'react-bootstrap/Row'
 
-import "./App.css";
-import Navigation from "./components/Navbar";
-import { getAlgorithmValue } from "./components/AlgorithmKeys";
+import './App.css'
+import Navigation from './components/Navbar'
+import { getAlgorithmValue } from './components/AlgorithmKeys'
 
 const ButtonDiv = styled.div`
-  margin-top: 30px;
-  text-align: center;
-`;
+ margin-top: 30px;
+ text-align: center;
+`
 
 const StyledButton = styled(Button)`
-  width: 250px;
-  height: 70px;
-  object-fit: none;
-`;
+ width: 250px;
+ height: 70px;
+ object-fit: none;
+`
 
 const Description = styled.p`
-  margin-top: 20px;
-`;
+ margin-top: 20px;
+`
 
 const DescriptionCopy = styled.p`
-  margin-top: 20px;
-  font-weight: bold;
-`;
+ margin-top: 20px;
+ font-weight: bold;
+`
 
 const ButtonText = styled.button`
-  background: none;
-  color: inherit;
-  border: none;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  outline: inherit;
-`;
+ background: none;
+ color: inherit;
+ border: none;
+ padding: 0;
+ font: inherit;
+ cursor: pointer;
+ outline: inherit;
+`
 
 function generateRandom() {
-  let randomSeed = Math.floor(Math.random() * 10000000000000);
-  let randomSeedString = ethers.utils.hexlify(randomSeed);
-  return ethers.utils.keccak256(randomSeedString);
+ let randomSeed = Math.floor(Math.random() * 10000000000000)
+ let randomSeedString = ethers.utils.hexlify(randomSeed)
+ return ethers.utils.keccak256(randomSeedString)
 }
 
 function setSeedWithInput() {
-  let seed = prompt("Please enter your seed here", "must be hex tho");
-  let text;
-  if (seed == null || seed == "") {
-    text = "User cancelled the prompt.";
-  } else {
-    text = seed;
-  }
-  return text
+ let seed = prompt('Please enter your seed here', 'must be hex tho')
+ let text
+ if (seed == null || seed === '') {
+  text = 'User cancelled the prompt.'
+ } else {
+  text = seed
+ }
+ return text
 }
 
 function App() {
-  const [loaded, setLoaded] = React.useState(0);
+ const [loaded, setLoaded] = React.useState(0)
 
-  let initSeed = generateRandom();
-  const [seed, setSeed] = React.useState(initSeed);
+ let initSeed = generateRandom()
+ const [seed, setSeed] = React.useState(initSeed)
 
-  const [algorithm, setAlgorithm] = React.useState("Chromie Squiggle");
+ const [algorithm, setAlgorithm] = React.useState('Chromie Squiggle')
 
-  let initImageHTML = generateHTML(algorithm, seed);
-  const [imageHTML, setImageHTML] = React.useState(initImageHTML);
+ let initImageHTML = generateHTML(algorithm, seed)
+ const [imageHTML, setImageHTML] = React.useState(initImageHTML)
 
-  function handleSetAlgorithm(algorithm: string) {
-    let newRNG = generateRandom();
-    setSeed(newRNG);
-    setAlgorithm(algorithm);
-    setImageHTML(generateHTML(algorithm, newRNG));
+ function handleSetAlgorithm(algorithm: string) {
+  let newRNG = generateRandom()
+  setSeed(newRNG)
+  setAlgorithm(algorithm)
+  setImageHTML(generateHTML(algorithm, newRNG))
+ }
+
+ function handleGenerateWithRandomSeed() {
+  let newRNG = generateRandom()
+  setSeed(newRNG)
+  setImageHTML(generateHTML(algorithm, newRNG))
+ }
+
+ function handleGenerateWithGivenSeed() {
+  let seed = setSeedWithInput()
+  setSeed(seed)
+  setImageHTML(generateHTML(algorithm, seed))
+ }
+
+ function getWindowDimensions() {
+  const { innerWidth: width, innerHeight: height } = window
+  return {
+   width,
+   height,
   }
+ }
 
-  function handleGenerateWithRandomSeed() {
-    let newRNG = generateRandom();
-    setSeed(newRNG);
-    setImageHTML(generateHTML(algorithm, newRNG));
-  }
-
-  function handleGenerateWithGivenSeed() {
-    let seed = setSeedWithInput();
-    setSeed(seed);
-    setImageHTML(generateHTML(algorithm, seed));
-  }
-
-  function getWindowDimensions() {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-      width,
-      height,
-    };
-  }
-
-  /*document.addEventListener("keydown", logKey);*/
+ /*document.addEventListener("keydown", logKey);*/
 
  /* function logKey(e: any) {
     if ((e.code == "Space" && e.target == document.body) || e.code == "Enter") {
@@ -104,9 +104,9 @@ function App() {
     }
   }*/
 
-  function generateHTML(algorithm: string, seed: string) {
-    let filename = getAlgorithmValue(algorithm);
-    let rawHTML = `<!DOCTYPE html>
+ function generateHTML(algorithm: string, seed: string) {
+  let filename = getAlgorithmValue(algorithm)
+  let rawHTML = `<!DOCTYPE html>
   <html lang="en">
 	  <head>
 	  <meta charset="UTF-8" />
@@ -125,86 +125,88 @@ function App() {
 	  </script>
 	  <script src="algorithms/${filename}"></script>
   </html>
-	  `;
+	  `
 
-    return rawHTML;
+  return rawHTML
+ }
+
+ function renderIFrame() {
+  let dims = getWindowDimensions()
+  let width = dims['width']
+  if (width < 2000) {
+   return (
+    <iframe
+     title="ArtBlocks"
+     height="2000"
+     srcDoc={imageHTML}
+     scrolling="no"
+     frameBorder={0}
+     allowFullScreen
+     sandbox="allow-scripts"
+     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+     onLoad={() => setLoaded(1)}
+    ></iframe>
+   )
+  } else {
+   return (
+    <iframe
+     title="ArtBlocks"
+     height="2600"
+     srcDoc={imageHTML}
+     scrolling="no"
+     frameBorder={0}
+     allowFullScreen
+     sandbox="allow-scripts"
+     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+     onLoad={() => setLoaded(1)}
+    ></iframe>
+   )
   }
+ }
 
-  function renderIFrame() {
-    let dims = getWindowDimensions();
-    let width = dims["width"];
-    if (width < 2000) {
-      return (
-        <iframe
-          title="ArtBlocks"
-          height="2000"
-          srcDoc={imageHTML}
-          scrolling="no"
-          frameBorder={0}
-          allowFullScreen
-          sandbox="allow-scripts"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          onLoad={() => setLoaded(1)}
-        ></iframe>
-      );
-    } else {
-      return (
-        <iframe
-          title="ArtBlocks"
-          height="2600"
-          srcDoc={imageHTML}
-          scrolling="no"
-          frameBorder={0}
-          allowFullScreen
-          sandbox="allow-scripts"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          onLoad={() => setLoaded(1)}
-        ></iframe>
-      );
-    }
-  }
+ function handleCopyText() {
+  const cb = navigator.clipboard
+  let msg = 'You copied the seed ' + seed
+  cb.writeText(seed).then(() => alert(msg))
+ }
 
-  function handleCopyText() {
-    const cb = navigator.clipboard;
-    let msg = "You copied the seed " + seed;
-    cb.writeText(seed).then(() => alert(msg));
-  }
+ return (
+  <>
+   <Navigation handleSetAlgorithm={handleSetAlgorithm} />
+   <Container style={{ textAlign: 'center' }} fluid>
+    <Row style={{ textAlign: 'center' }}>{renderIFrame()}</Row>
 
-  return (
-    <>
-      <Navigation handleSetAlgorithm={handleSetAlgorithm} />
-      <Container style={{textAlign: "center"}}fluid>
-        <Row style={{textAlign: "center"}}>{renderIFrame()}</Row>
+    <ButtonDiv>
+     <StyledButton
+      variant="dark"
+      onClick={() => handleGenerateWithRandomSeed()}
+     >
+      <b>Generate with random Seed</b> <br />
+      (⎵ or Enter)
+     </StyledButton>
+     <StyledButton variant="dark" onClick={() => handleGenerateWithGivenSeed()}>
+      <b>Generate with your preferred Seed</b> <br />
+     </StyledButton>
 
-        <ButtonDiv>
-          <StyledButton variant="dark" onClick={() => handleGenerateWithRandomSeed()}>
-            <b>Generate with random Seed</b> <br />
-            (⎵ or Enter)
-          </StyledButton>
-          <StyledButton variant="dark" onClick={() => handleGenerateWithGivenSeed()}>
-            <b>Generate with your preferred Seed</b> <br />
-          </StyledButton>
+     <Description>
+      <i>Current Series: {algorithm}</i>
+     </Description>
 
+     <ButtonText onClick={() => handleCopyText()}>
+      <DescriptionCopy>
+       👉 Click this to copy the random seed used 👈
+      </DescriptionCopy>
+     </ButtonText>
 
-          <Description>
-            <i>Current Series: {algorithm}</i>
-          </Description>
-
-          <ButtonText onClick={() => handleCopyText()}>
-            <DescriptionCopy>
-              👉 Click this to copy the random seed used 👈
-            </DescriptionCopy>
-          </ButtonText>
-
-          <Description>
-            The seed is how the art piece gets generated. <br />
-            Keep it close, or you will never be able to regenerate this exact
-            piece ever again.
-          </Description>
-        </ButtonDiv>
-      </Container>
-    </>
-  );
+     <Description>
+      The seed is how the art piece gets generated. <br />
+      Keep it close, or you will never be able to regenerate this exact piece
+      ever again.
+     </Description>
+    </ButtonDiv>
+   </Container>
+  </>
+ )
 }
 
-export default App;
+export default App
